@@ -19,3 +19,26 @@ class Link(db.Model):
 def gerar_codigo():
     caracteres = string.ascii_letters + string.digits
     return ''.join(random.choice(caracteres) for _ in range(5))    
+
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    url_encurtada = None
+    
+    if request.method == 'POST':
+        url_recebida = request.form['url_longa']
+        
+        codigo = gerar_codigo()
+        
+        novo_link = Link(original_url=url_recebida, short_code=codigo)
+        db.session.add(novo_link)
+        db.session.commit()
+        
+        url_encurtada = request.host_url + codigo
+        
+    return render_template('index.html', url_result=url_encurtada)
+
+@app.route('/<codigo>')
+def redirecionar(codigo):
+    link_obj = Link.query.filter_by(short_code=codigo).first_or_404()
+    return redirect(link_obj.original_url)
