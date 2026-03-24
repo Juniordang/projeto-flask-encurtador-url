@@ -12,9 +12,7 @@
   <body>
     <div class="container">
       <h1>Encurtador de Url</h1>
-      <p>
-        Encurte seus links de forma rápida e receba, SIIII GRAÇAS A DEUS PAI...
-      </p>
+      <p>Encurte seus links de forma rápida.</p>
 
       <form method="POST">
         <div class="input-group">
@@ -27,6 +25,16 @@
         </div>
         <button type="submit">Gerar Link Curto</button>
       </form>
+
+      <div class="result-box">
+        <span class="result-label">PRONTO PARA USAR:</span>
+        <div class="url-display">
+          <a href="{{ url_result }}" id="shortUrl" target="_blank"
+            >{{ url_result }}</a
+          >
+          <button class="copy-btn" onclick="copyToClipboard()">Copiar</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>
