@@ -36,5 +36,20 @@
         </div>
       </div>
     </div>
+
+    <script>
+      function copyToClipboard() {
+        const urlText = document.getElementById("shortUrl").innerText;
+        navigator.clipboard.writeText(urlText).then(() => {
+          const btn = document.querySelector(".copy-btn");
+          btn.innerText = "Copiado!";
+          btn.style.background = "#22c55e";
+          setTimeout(() => {
+            btn.innerText = "Copiar";
+            btn.style.background = "#334155";
+          }, 2000);
+        });
+      }
+    </script>
   </body>
 </html>
