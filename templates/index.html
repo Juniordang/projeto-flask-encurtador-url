@@ -3,52 +3,386 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Encurtador de URL</title>
+    <title>Encurtar Flask</title>
+
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+
+    <style>
+      :root {
+        --bg: #ffffff;
+        --card-bg: #ffffff;
+        --text: #171717;
+        --text-muted: #737373;
+        --primary: #000000;
+        --primary-hover: #262626;
+        --success: #171717;
+        --border-color: #e5e5e5;
+        --input-bg: #f5f5f5;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg);
+        color: var(--text);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: 6rem 2rem;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 500px;
+        animation: fadeIn 0.4s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      header {
+        margin-bottom: 3.5rem;
+        text-align: center;
+      }
+
+      .logo {
+        color: var(--text);
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        margin-bottom: 0.5rem;
+      }
+
+      p.tagline {
+        color: var(--text-muted);
+        font-size: 1rem;
+        letter-spacing: -0.01em;
+      }
+
+      .card {
+        background: var(--card-bg);
+        padding: 0;
+        margin-bottom: 3rem;
+      }
+
+      .input-group {
+        display: flex;
+        gap: 0.5rem;
+        position: relative;
+      }
+
+      input[type="url"] {
+        flex: 1;
+        padding: 0.85rem 1rem;
+        background: var(--input-bg);
+        border: 1px solid var(--primary-hover);
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s;
+        color: var(--text);
+      }
+
+      input[type="url"]:focus {
+        background: #ffffff;
+        border-color: var(--primary);
+        border-width: 1.5px;
+      }
+
+      input[type="url"]::placeholder {
+        color: #a3a3a3;
+      }
+
+      button.btn-primary {
+        padding: 0.85rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      button.btn-primary:hover {
+        background: var(--primary-hover);
+      }
+
+      .result-box {
+        margin-top: 1.5rem;
+        padding: 1rem 1.25rem;
+        background: #fafafa;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        animation: scaleUp 0.2s ease-out;
+      }
+
+      @keyframes scaleUp {
+        from {
+          opacity: 0;
+          transform: scale(0.99);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .result-link {
+        font-weight: 500;
+        color: var(--text);
+        text-decoration: underline;
+        font-size: 0.95rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 2px;
+      }
+
+      .btn-copy {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.4rem 0.75rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+      }
+
+      .btn-copy:hover {
+        background: #f5f5f5;
+        border-color: #d4d4d4;
+      }
+
+      /* History section */
+      .history-area {
+        border-top: 1px solid var(--border-color);
+        padding-top: 2.5rem;
+      }
+
+      .history-title {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-muted);
+        margin-bottom: 1.5rem;
+      }
+
+      .history-list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .history-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .history-item:last-child {
+        border-bottom: none;
+      }
+
+      .url-pair {
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+        overflow: hidden;
+        padding-right: 1.5rem;
+      }
+
+      .original-url {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .shortened-url {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text);
+        text-decoration: none;
+      }
+
+      .shortened-url:hover {
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .btn-history-copy {
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        transition: all 0.2s;
+      }
+
+      .btn-history-copy:hover {
+        color: var(--text);
+        background: #f5f5f5;
+      }
+
+      /* Utility classes extracted from inline styles */
+      .result-box-error {
+        background: #fff1f2;
+        border-color: #fecdd3;
+        color: #be123c;
+      }
+      .error-text {
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      .history-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+      }
+      .history-title-no-margin {
+        margin-bottom: 0;
+      }
+      .clear-form {
+        margin: 0;
+      }
+      .btn-danger {
+        color: #ef4444;
+        border: 1px solid #fee2e2;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <h1>Encurtador de Url</h1>
-      <p>Encurte seus links de forma rápida.</p>
+      <header>
+        <div class="logo">Encurtar Flask</div>
+        <p class="tagline">Simplificando a sua vida, um link de cada vez.</p>
+      </header>
 
-      <form method="POST">
-        <div class="input-group">
-          <input
-            type="url"
-            name="url_longa"
-            placeholder="Cole seu link gigante aqui..."
-            required
-          />
+      <div class="card">
+        <form method="POST">
+          <div class="input-group">
+            <input
+              type="url"
+              name="url_longa"
+              placeholder="Cole sua URL longa aqui..."
+              required
+            />
+            <button type="submit" class="btn-primary">Encurtar</button>
+          </div>
+        </form>
+
+        {% if erro %}
+        <div class="result-box result-box-error">
+          <span class="error-text">{{ erro }}</span>
         </div>
-        <button type="submit">Gerar Link Curto</button>
-      </form>
-
-      <div class="result-box">
-        <span class="result-label">PRONTO PARA USAR:</span>
-        <div class="url-display">
-          <a href="{{ url_result }}" id="shortUrl" target="_blank"
+        {% endif %} {% if url_result %}
+        <div class="result-box">
+          <a href="{{ url_result }}" class="result-link" target="_blank"
             >{{ url_result }}</a
           >
-          <button class="copy-btn" onclick="copyToClipboard()">Copiar</button>
+          <button class="btn-copy" onclick="copyText('{{ url_result }}', this)">
+            Copiar
+          </button>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if links %}
+      <div class="history-area">
+        <div class="history-header">
+          <h2 class="history-title history-title-no-margin">Seu histórico</h2>
+          <form
+            action="{{ url_for('limpar_historico') }}"
+            method="POST"
+            class="clear-form"
+          >
+            <button
+              type="submit"
+              class="btn-history-copy btn-danger"
+              onclick="
+                return confirm(
+                  'Tem certeza que deseja limpar todo o histórico?',
+                );
+              "
+            >
+              Limpar Tudo
+            </button>
+          </form>
+        </div>
+
+        <div class="history-list">
+          {% for link in links %}
+          <div class="history-item">
+            <div class="url-pair">
+              <span class="original-url">{{ link.original_url }}</span>
+              <a
+                href="{{ request.host_url }}{{ link.short_code }}"
+                class="shortened-url"
+                target="_blank"
+              >
+                {{ request.host_url }}{{ link.short_code }}
+              </a>
+            </div>
+            <button
+              class="btn-history-copy"
+              onclick="copyText('{{ request.host_url }}{{ link.short_code }}', this)"
+            >
+              Copiar
+            </button>
+          </div>
+          {% endfor %}
         </div>
       </div>
+      {% endif %}
     </div>
 
     <script>
-      function copyToClipboard() {
-        const urlText = document.getElementById("shortUrl").innerText;
-        navigator.clipboard.writeText(urlText).then(() => {
-          const btn = document.querySelector(".copy-btn");
-          btn.innerText = "Copiado!";
-          btn.style.background = "#22c55e";
+      async function copyText(text, btn) {
+        try {
+          await navigator.clipboard.writeText(text);
+          const originalText = btn.innerText;
+          btn.innerText = "Copiado";
+
           setTimeout(() => {
-            btn.innerText = "Copiar";
-            btn.style.background = "#334155";
+            btn.innerText = originalText;
           }, 2000);
-        });
+        } catch (err) {
+          console.error("Erro ao copiar: ", err);
+        }
       }
     </script>
   </body>
