@@ -13,3 +13,7 @@ Projeto desenvolvido utilizando Python e o micro-framework Flask para transforma
 1. Clone o repositório.
 2. Instale as dependências: `pip install -r requirements.txt`.
 3. Execute: `python app.py`.
+
+## Imagem do Projeto
+
+![alt text](image.png)
