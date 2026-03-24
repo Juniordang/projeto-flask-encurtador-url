@@ -42,3 +42,9 @@ def index():
 def redirecionar(codigo):
     link_obj = Link.query.filter_by(short_code=codigo).first_or_404()
     return redirect(link_obj.original_url)
+
+
+if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()  
+    app.run(debug=True)
