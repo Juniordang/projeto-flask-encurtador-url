@@ -2,5 +2,5 @@ venv/
 *.pyc
 __pycache__/
 instance/
-database.db
+instance/database.db
 .env
