@@ -24,6 +24,7 @@ def gerar_codigo():
 @app.route('/', methods=['GET', 'POST'])
 def index():
     url_encurtada = None
+    erro = None
     
     if request.method == 'POST':
         url_recebida = request.form['url_longa']
@@ -36,7 +37,17 @@ def index():
         
         url_encurtada = request.host_url + codigo
         
-    return render_template('index.html', url_result=url_encurtada)
+    links = Link.query.order_by(Link.id.desc()).all()
+    return render_template('index.html', url_result=url_encurtada, links=links, erro=erro)
+
+@app.route('/limpar', methods=['POST'])
+def limpar_historico():
+    try:
+        db.session.query(Link).delete()
+        db.session.commit()
+    except:
+        db.session.rollback()
+    return redirect(url_for('index'))
 
 @app.route('/<codigo>')
 def redirecionar(codigo):
