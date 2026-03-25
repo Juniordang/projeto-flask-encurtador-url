@@ -41,7 +41,7 @@ sudo apt install python3.12-venv
 
 
 # Clonar o projeto
-git clone [https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git](https://github.com/SEU_USUARIO/NOME_DO_REPOSITORIO.git)
+git clone https://github.com/Juniordang/projeto-flask-encurtador-url.git
 cd NOME_DO_REPOSITORIO
 
 # Criar o ambiente virtual (venv)
