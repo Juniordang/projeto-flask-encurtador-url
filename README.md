@@ -46,11 +46,12 @@ cd NOME_DO_REPOSITORIO
 
 # Criar o ambiente virtual (venv)
 python3 -m venv venv
+source venv/bin/activate
 
 # Instalar dependências dentro da venv para evitar conflitos globais
 ./venv/bin/python3 -m pip install -r requirements.txt
 
-
+#Rode o projeto
 ./venv/bin/python3 app.py
 
 
