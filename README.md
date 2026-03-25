@@ -53,7 +53,9 @@ python3 -m venv venv
 
 ./venv/bin/python3 app.py
 
+
+```
+
 ## Imagem do Projeto
 
 ![alt text](image.png)
-```
